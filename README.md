@@ -4,27 +4,28 @@ This repository contains a collection of MySQL queries and MongoDB commands, org
 MySQL:
 For Linux Users
 
-XAMPP Installation
-https://www.youtube.com/watch?v=R5CUn5wGQGg
+1. XAMPP Installation
+   https://www.youtube.com/watch?v=R5CUn5wGQGg
 
-To run XAMPP
-sudo /opt/lampp/manager-linux-x64.run
+2. To run XAMPP
+   sudo /opt/lampp/manager-linux-x64.run
 
-To open PHP MyAdmin
-http://localhost/dashboard/
+3. To open PHP MyAdmin
+   http://localhost/dashboard/
 
-To open MySQL on terminal
-sudo  /opt/lampp/bin/mysql -u root
+4. To open MySQL on terminal
+   sudo  /opt/lampp/bin/mysql -u root
 
 MongoDB:
-Start MongoDB
-sudo systemctl start mongod
 
-Verify that MongoDB has started successfully.
-sudo systemctl status mongod
+1. Start MongoDB
+   sudo systemctl start mongod
 
-Stop MongoDB.
-sudo systemctl stop mongod
+2. Verify that MongoDB has started successfully.
+   sudo systemctl status mongod
 
-Begin using MongoDB.
-mongosh
+3. Stop MongoDB.
+   sudo systemctl stop mongod
+
+4. Begin using MongoDB.
+   mongosh
