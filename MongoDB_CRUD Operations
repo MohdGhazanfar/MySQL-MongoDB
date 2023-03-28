@@ -1,0 +1,134 @@
+Exercises
+
+1) Create a database named your rollno_section (i.e. 18P0014_6B).
+2) Create collections named cities and moviepeople_1000.
+3) Import the documents cities.jsonl and moviepeople-1000.jsonl into the cities and moviepeople collection respectively by issuing the following command.
+
+//First 3 tasks were done during class but weren't recorded.
+//Documents are imported in the collections using mongoimport --db dbName --collection collectionName -- file fileName.json
+
+test> use p200567
+switched to db p200567
+p200567> show collections
+cities
+moviepeople_1000 
+
+4) In the mongo shell client, write queries for finding: (hint: use cities collection)
+i. All those cities whose time zone is Africa/Harare.
+
+p200567> db.cities.find( { timezone: "Africa/Harare" } )
+[
+  {
+    _id: ObjectId("637880eda46e550c23ffb123"),
+    name: 'Zvishavane',
+    country: 'ZW',
+    timezone: 'Africa/Harare',
+    population: 35896,
+    location: { latitude: -20.32674, longitude: 30.06648 }
+  },
+  {
+    _id: ObjectId("637880eda46e550c23ffb124"),
+    name: 'Shurugwi',
+    country: 'ZW',
+    timezone: 'Africa/Harare',
+    population: 17075,
+    location: { latitude: -19.67016, longitude: 30.00589 }
+  },
+  {
+    _id: ObjectId("637880eda46e550c23ffb125"),
+    name: 'Victoria Falls',
+    country: 'ZW',
+    timezone: 'Africa/Harare',
+    population: 35761,
+    location: { latitude: -17.92353, longitude: 25.84299 }
+  },
+  .
+  .
+  .
+  .
+  .
+  
+  ii. All those cities whose population is greater than 12985000.
+  p200567> db.cities.find( { population: { $gt: 12985000 } } )
+[
+  {
+    _id: ObjectId("637880eaa46e550c23fe2e48"),
+    name: 'Buenos Aires',
+    country: 'AR',
+    timezone: 'America/Argentina/Buenos_Aires',
+    population: 13076300,
+    location: { latitude: -34.61315, longitude: -58.37723 }
+  },
+  {
+    _id: ObjectId("637880eaa46e550c23fe5240"),
+    name: 'Shanghai',
+    country: 'CN',
+    timezone: 'Asia/Shanghai',
+    population: 14608512,
+    location: { longitude: 31.22222, latitude: 121.45806 }
+  }
+]
+
+iii. A city whose longitude equals to -58.37723. Your query should return location and population fields only.
+  
+p200567> db.cities.find( { "location.longitude": -58.37723 }, { location: 1, population: 1 } )
+[
+  {
+    _id: ObjectId("637880eaa46e550c23fe2e48"),
+    population: 13076300,
+    location: { latitude: -34.61315, longitude: -58.37723 }
+  }
+]
+
+5) Write a query to update the population from 35000 to 55000 whose country is PK and a location latitude of 73.2122.
+
+p200567> db.cities.updateOne( { country:"PK", "location.latitude": 73.2122}, {$set: {"population":55000}} )
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+6) Write a query to delete the document whose timezone is Asia/Karachi and a country is PK.
+
+p200567> db.cities.deleteMany({ country:"PK",  timezone : "Asia/Karachi" })
+{ acknowledged: true, deletedCount: 424 }
+
+ 7) Write a query for finding the document whose birthname name array contains (“Freeman, Crispin McDougal”) as a value.
+ 
+p200567> db.moviepeople_1000.find( {"info.birthname": ["Freeman, Crispin McDougal"]} )
+[
+  {
+    _id: ObjectId("63788137335f59c7ec0eada8"),
+    'person-name': 'Freeman, Crispin',
+    info: {
+      quotes: [
+        "On advice to aspiring voice-over actors: For myself, I'm in the favor of the more versatile kind of voice who can do all sorts of roles and transform. But to do that you have to have chops, and the best way to get them is through the classics, especially Shakespeare. It teaches you a lot about breathing, and idea and intention and rhythm. He's written the characters into the very poetry of the language, and if you try to get into and match his poetry it will take you out of your normal language patterns and that's the beginning of creating a character, not playing your mundane, everyday self. It's so verbally based, and in voice-acting, all you've got is your voice."
+      ],
+      trivia: [
+        'Said he was a little nervous about taking on the role of Zelgadis in Slayers because the character had already been voiced by someone else. When it came to reinterpretting the character, he said he thought that Zelgadis had more of an axe to grind.',
+        'Fluent in English and Spanish.',
+        "Is a big fan of authors 'William Shakespeare (I)' (qv), 'J.R.R. Tolkien' (qv), 'Joseph Campbell (III)' (qv), 'Marshall McLuhan' (qv), and 'William Gibson (II)' (qv).",
+        "Is a big fan of anime creators 'Hayao Miyazaki' (qv) and 'Osamu Tezuka (I)' (qv).",
+        'Frequently does voice overs for various union and non-union voice production companies for some video games and mostly animes.',
+        "Has a younger brother, 'Clark Freeman' (qv), and a younger sister, 'Cassidy Freeman' (qv).",
+        'Graduated from Williams College with a B.A. in theater & a minor in computer science',
+        'Graduated from Columbia University with an M.F.A. in acting',
+        'Is one of the only English-speaking voice actors to voice the same character of all Xenosaga video game series. Crispin was the only voice actor to provide the English voice of Albedo and Gaignun Kukai of the series.',
+        "On August 11, 2007, he married 'Izobel Carol' (qv) on The Big Island of Hawaii.",
+        'He and Veronica Taylor both came to the anime Slayers series as replacements - she replaced Joani Baker as Amelia and he replaced Daniel Cronin as Zelgadis.'
+      ],
+      minibiography: [
+        "Crispin is the oldest of three. He has a younger brother, Clark, and youngest sister, Cassidy. All three attended the Latin School of Chicago, where Crispin graduated in a class of 60 in 1990. Crispin had a Mac in 1985. To this day he is still an avid computer geek. He played no official team sports in school, but participated in ad hoc football played in Lincoln Park. Crispin was an active participant in many school plays both on and behind stage. He's also a genuinely nice and humble person."
+      ],
+      birthnotes: [ 'Chicago, Illinois, USA' ],
+      birthdate: [ '9 February 1972' ],
+      height: [ "6' 2" ],
+      spouse: [ "'Izobel Carol' (qv) (11 August 2007 - present)" ],
+      birthname: [ 'Freeman, Crispin McDougal' ]
+    }
+  }
+]
+

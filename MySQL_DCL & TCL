@@ -1,0 +1,133 @@
+Exercises
+1. Create a user, user name should be your name.
+
+MariaDB [(none)]> CREATE USER 'Ghazi'@'localhost' IDENTIFIED BY '123';
+Query OK, 0 rows affected (0.054 sec)
+
+MariaDB [(none)]> select host, user, password from mysql.user;
++-----------+-------------+-------------------------------------------+
+| Host      | User        | Password                                  |
++-----------+-------------+-------------------------------------------+
+| localhost | root        |                                           |
+| 127.0.0.1 | root        |                                           |
+| ::1       | root        |                                           |
+| localhost |             |                                           |
+| localhost | pma         |                                           |
+| localhost | mariadb.sys |                                           |
+| localhost | Ghazi       | *23AE809DDACAF96AF0FD78ED04B6A265E05AA257 |
++-----------+-------------+-------------------------------------------+
+7 rows in set (0.021 sec)
+
+2. Grants privileges to the user you created
+● To access EMPLOYEE table (SELECT,UPDATE) from database themepark
+
+MariaDB [(none)]> GRANT select, update on p200567_ghazanfar.EMPLOYEE TO 'Ghazi'@'localhost';
+Query OK, 0 rows affected (0.007 sec)
+
+● To access the views (SELECT) you have created in themepark (at least 1 view).
+
+MariaDB [(none)]> GRANT select, update on p200567_ghazanfar.EMPLOYEE TO 'Ghazi'@'localhost';
+Query OK, 0 rows affected (0.007 sec)
+
+● To access full database of fb/company (which you have used in last lab)
+
+MariaDB [(none)]> GRANT ALL on company.* TO 'Ghazi'@'localhost';
+Query OK, 0 rows affected (0.007 sec)
+
+● To create a database
+
+MariaDB [(none)]> GRANT create on *.* TO 'Ghazi'@'localhost';
+Query OK, 0 rows affected (0.005 sec)
+
+3. Revoke the right to access the view you granted in exercise 2.
+
+MariaDB [(none)]> REVOKE Select on p200567_ghazanfar.EMP_DETAILS FROM 'Ghazi'@'localhost';
+Query OK, 0 rows affected (0.011 sec)
+
+4. Give a demonstration of commit, rollback and savepoint commands.
+● You can use any already define database for the demonstration of TCL commands.
+
+MariaDB [p200567_ghazanfar]> SET AUTOCOMMIT=0;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [p200567_ghazanfar]> select* from EMPLOYEE;
++---------+-----------+------------+-----------+------------+---------------+---------------+-----------+-----------+
+| EMP_NUM | EMP_TITLE | EMP_LNAME  | EMP_FNAME | EMP_DOB    | EMP_HIRE_DATE | EMP_AREA_CODE | EMP_PHONE | PARK_CODE |
++---------+-----------+------------+-----------+------------+---------------+---------------+-----------+-----------+
+|     100 | Ms        | Calderdale | Emma      | 1972-06-15 | 1992-03-15    | 0181          | 324-9652  | FR1001    |
+|     101 | Ms        | Ricardo    | Marshel   | 1978-03-19 | 1996-04-25    | 0181          | 324-4472  | UK3452    |
+|     102 | Mr        | Arshad     | Arif      | 1969-11-14 | 1990-12-20    | 7253          | 675-8993  | FR1001    |
+|     103 | Ms        | Roberts    | Anne      | 1974-10-16 | 1994-08-16    | 0181          | 898-3456  | UK3452    |
+|     104 | Mr        | Denver     | Enrica    | 1980-11-08 | 2001-10-20    | 7253          | 504-4434  | ZA1342    |
+|     105 | Ms        | Namowa     | Mirrelle  | 1990-03-14 | 2006-11-08    | 0181          | 890-3243  | FR1001    |
+|     106 | Mrs       | Smith      | Gemma     | 1968-02-12 | 1989-01-05    | 0181          | 324-7845  | ZA1342    |
++---------+-----------+------------+-----------+------------+---------------+---------------+-----------+-----------+
+7 rows in set (0.001 sec)
+
+MariaDB [p200567_ghazanfar]> insert into EMPLOYEE VALUES (107,'Mr','Ali','Mohd','2000-12-20','2022-11-07','0999','123-4321','FR1001');
+Query OK, 1 row affected (0.000 sec)
+
+MariaDB [p200567_ghazanfar]> select* from EMPLOYEE;
++---------+-----------+------------+-----------+------------+---------------+---------------+-----------+-----------+
+| EMP_NUM | EMP_TITLE | EMP_LNAME  | EMP_FNAME | EMP_DOB    | EMP_HIRE_DATE | EMP_AREA_CODE | EMP_PHONE | PARK_CODE |
++---------+-----------+------------+-----------+------------+---------------+---------------+-----------+-----------+
+|     100 | Ms        | Calderdale | Emma      | 1972-06-15 | 1992-03-15    | 0181          | 324-9652  | FR1001    |
+|     101 | Ms        | Ricardo    | Marshel   | 1978-03-19 | 1996-04-25    | 0181          | 324-4472  | UK3452    |
+|     102 | Mr        | Arshad     | Arif      | 1969-11-14 | 1990-12-20    | 7253          | 675-8993  | FR1001    |
+|     103 | Ms        | Roberts    | Anne      | 1974-10-16 | 1994-08-16    | 0181          | 898-3456  | UK3452    |
+|     104 | Mr        | Denver     | Enrica    | 1980-11-08 | 2001-10-20    | 7253          | 504-4434  | ZA1342    |
+|     105 | Ms        | Namowa     | Mirrelle  | 1990-03-14 | 2006-11-08    | 0181          | 890-3243  | FR1001    |
+|     106 | Mrs       | Smith      | Gemma     | 1968-02-12 | 1989-01-05    | 0181          | 324-7845  | ZA1342    |
+|     107 | Mr        | Ali        | Mohd      | 2000-12-20 | 2022-11-07    | 0999          | 123-4321  | FR1001    |
++---------+-----------+------------+-----------+------------+---------------+---------------+-----------+-----------+
+8 rows in set (0.001 sec)
+
+MariaDB [p200567_ghazanfar]> ROLLBACK;
+Query OK, 0 rows affected (0.009 sec)
+
+MariaDB [p200567_ghazanfar]> select* from EMPLOYEE;
++---------+-----------+------------+-----------+------------+---------------+---------------+-----------+-----------+
+| EMP_NUM | EMP_TITLE | EMP_LNAME  | EMP_FNAME | EMP_DOB    | EMP_HIRE_DATE | EMP_AREA_CODE | EMP_PHONE | PARK_CODE |
++---------+-----------+------------+-----------+------------+---------------+---------------+-----------+-----------+
+|     100 | Ms        | Calderdale | Emma      | 1972-06-15 | 1992-03-15    | 0181          | 324-9652  | FR1001    |
+|     101 | Ms        | Ricardo    | Marshel   | 1978-03-19 | 1996-04-25    | 0181          | 324-4472  | UK3452    |
+|     102 | Mr        | Arshad     | Arif      | 1969-11-14 | 1990-12-20    | 7253          | 675-8993  | FR1001    |
+|     103 | Ms        | Roberts    | Anne      | 1974-10-16 | 1994-08-16    | 0181          | 898-3456  | UK3452    |
+|     104 | Mr        | Denver     | Enrica    | 1980-11-08 | 2001-10-20    | 7253          | 504-4434  | ZA1342    |
+|     105 | Ms        | Namowa     | Mirrelle  | 1990-03-14 | 2006-11-08    | 0181          | 890-3243  | FR1001    |
+|     106 | Mrs       | Smith      | Gemma     | 1968-02-12 | 1989-01-05    | 0181          | 324-7845  | ZA1342    |
++---------+-----------+------------+-----------+------------+---------------+---------------+-----------+-----------+
+7 rows in set (0.000 sec)
+
+MariaDB [p200567_ghazanfar]> insert into EMPLOYEE VALUES (108,'Mrs','Aliana','Mohd','2001-12-20','2021-11-07','0299','523-4321','UK3452');
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [p200567_ghazanfar]> insert into EMPLOYEE VALUES (109,'Mrs','Ana','Mo','2003-12-20','2019-11-07','0259','523-4521','UK3452');
+Query OK, 1 row affected (0.000 sec)
+
+MariaDB [p200567_ghazanfar]> SAVEPOINT L1;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [p200567_ghazanfar]> insert into EMPLOYEE VALUES (110,'Mrs','Asalin','Yen','2005-12-20','2018-11-07','3259','213-4521','ZA1342');
+Query OK, 1 row affected (0.000 sec)
+
+MariaDB [p200567_ghazanfar]> ROLLBACK TO L1;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [p200567_ghazanfar]> select* from EMPLOYEE;
++---------+-----------+------------+-----------+------------+---------------+---------------+-----------+-----------+
+| EMP_NUM | EMP_TITLE | EMP_LNAME  | EMP_FNAME | EMP_DOB    | EMP_HIRE_DATE | EMP_AREA_CODE | EMP_PHONE | PARK_CODE |
++---------+-----------+------------+-----------+------------+---------------+---------------+-----------+-----------+
+|     100 | Ms        | Calderdale | Emma      | 1972-06-15 | 1992-03-15    | 0181          | 324-9652  | FR1001    |
+|     101 | Ms        | Ricardo    | Marshel   | 1978-03-19 | 1996-04-25    | 0181          | 324-4472  | UK3452    |
+|     102 | Mr        | Arshad     | Arif      | 1969-11-14 | 1990-12-20    | 7253          | 675-8993  | FR1001    |
+|     103 | Ms        | Roberts    | Anne      | 1974-10-16 | 1994-08-16    | 0181          | 898-3456  | UK3452    |
+|     104 | Mr        | Denver     | Enrica    | 1980-11-08 | 2001-10-20    | 7253          | 504-4434  | ZA1342    |
+|     105 | Ms        | Namowa     | Mirrelle  | 1990-03-14 | 2006-11-08    | 0181          | 890-3243  | FR1001    |
+|     106 | Mrs       | Smith      | Gemma     | 1968-02-12 | 1989-01-05    | 0181          | 324-7845  | ZA1342    |
+|     108 | Mrs       | Aliana     | Mohd      | 2001-12-20 | 2021-11-07    | 0299          | 523-4321  | UK3452    |
+|     109 | Mrs       | Ana        | Mo        | 2003-12-20 | 2019-11-07    | 0259          | 523-4521  | UK3452    |
++---------+-----------+------------+-----------+------------+---------------+---------------+-----------+-----------+
+9 rows in set (0.001 sec)
+
+

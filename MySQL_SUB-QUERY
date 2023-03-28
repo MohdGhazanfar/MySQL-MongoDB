@@ -1,0 +1,112 @@
+SUB-QUERY
+
+Run the script employees.sql (provided), you will get the database of a company with the following three tables about emp, dept, and sal_grade:
+
+Dept (deptno: integer, dname: string, location: string)
+Emp (empno: integer, ename: string, job: string, mgr (employee’s manager id): integer, hiredate:
+date,salary: integer, commission: integer, deptno: integer)
+Sal_grade (grade: integer, losal (low salary): integer, hisal (high salary: integer)
+
+● Attributes belonging to the primary key of a table are underlined.
+
+Using the emp(employee) and dept (department) table do the following (Using Sub-queries):
+
+1. Display the employee who got the maximum salary.
+
+select ename from emp where salary = (select MAX(salary) from emp);
++-------+
+| ename |
++-------+
+| King  |
+
+
+2. Display the employees who are working in Sales department.
+
+select ename from emp where deptno=(select deptno from dept where dname='Sales');
++--------+
+| ename  |
++--------+
+| Allen  |
+| Ward   |
+| Martin |
+| Blake  |
+| Turner |
+| James  |
+
+
+3. Display the employees who are working in “New York”.
+
+select ename from emp where deptno=(select deptno from dept where location='New York');
++--------+
+| ename  |
++--------+
+| Clark  |
+| King   |
+| Miller |
+
+
+4. Find out no. of employees working in “Sales” department.
+
+select COUNT(ename) from emp where deptno=(select deptno from dept where dname='Sales');
++--------------+
+| COUNT(ename) |
++--------------+
+|            6 |
+
+
+5. List out the employees who earn more than every employee in department 30.
+
+select ename from emp where salary>ALL(select MAX(salary) from emp where deptno='30');
++-------+
+| ename |
++-------+
+| Jones |
+| Scott |
+| King  |
+| Ford  |
+
+
+6. List out the employees who earn more than the lowest salary in department 30.
+
+select ename from emp where salary>ALL(select MIN(salary) from emp where deptno='30');
++--------+
+| ename  |
++--------+
+| Allen  |
+| Ward   |
+| Jones  |
+| Martin |
+| Blake  |
+| Clark  |
+| Scott  |
+| David  |
+| King   |
+| Turner |
+| Adams  |
+| Ford   |
+| Miller |
+
+
+7. Find out whose department has not employees.
+
+select dname from dept where deptno not in(select deptno from emp);
++------------+
+| dname      |
++------------+
+| Operations |
+
+
+8. Find out the employees who earn greater than the average salary for their department
+
+
+select ename from emp EO where EO.salary>(select AVG(salary) from emp EI where EI.deptno=EO.deptno);
++-------+
+| ename |
++-------+
+| Allen |
+| Jones |
+| Blake |
+| Scott |
+| King  |
+| Ford  |
++-------+

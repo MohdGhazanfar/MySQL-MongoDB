@@ -1,0 +1,146 @@
+Exercises
+
+Table 1: Users [user_id (p.k)]
+
+user_id username password email salary
+1        abc123   def321   abc123@yahoo.com 30000
+2        xyz789   asd123   xyz789@gmail.com 50000
+
+Table 2: Summary [id(p.k)]
+
+id total_users Yahoo Hotmail Gmail
+1       2         1     0      1
+
+Create a database name person and create the tables above.
+
+1. Write a procedure that take id, total_user, Yahoo, Hotmail, Gmail values as an input and insert the data into the table summary.
+
+create PROCEDURE insertInSummary (IN total_users INT, IN Yahoo INT, IN Hotmail INT, IN Gmail INT)
+BEGIN
+	INSERT INTO Summary (total_users, Yahoo, Hotmail, Gmail) VALUES (total_users, Yahoo, Hotmail, Gmail);
+	
+END$$
+
++----+-------------+-------+---------+-------+
+| id | total_users | Yahoo | Hotmail | Gmail |
++----+-------------+-------+---------+-------+
+|  1 |           5 |     1 |       2 |     2 |
++----+-------------+-------+---------+-------+
+
+
+2. Write a procedure that take user_id, username, password, email values as an input and insert the data into the table Users.
+
+create PROCEDURE insertInUsers (IN username TEXT, IN password TEXT, IN email TEXT, IN salary INT)
+BEGIN
+	INSERT INTO Users (username, password, email, salary) VALUES (username, password, email, salary);
+	
+END$$
+
++---------+----------+----------+-------------------+--------+
+| user_id | username | password | email             | salary |
++---------+----------+----------+-------------------+--------+
+|       1 | Ali      | 1234     | ali@gmail.com     |  90000 |
+|       2 | Jatoi    | 321      | jatoi@hotmail.com |  50000 |
+|       3 | Huraira  | 7980     | huraia@yahoo.com  |  80000 |
+|       4 | Ghazi    | 5678     | ghazi@gmail.com   | 100000 |
+|       5 | Arsam    | 0987     | arsam@hotmail.com |  85000 |
++---------+----------+----------+-------------------+--------+
+
+
+3. Write a procedure that output the total number of records/rows in the users table.
+
+create PROCEDURE countUsers ()
+BEGIN
+	SELECT COUNT(user_id) from Users;
+	
+END$$
+
+MariaDB [person]> call countUsers;
++----------------+
+| COUNT(user_id) |
++----------------+
+|              5 |
++----------------+
+
+
+4. Write a procedure that output the average salary in the users table.
+
+create PROCEDURE avgSalary ()
+BEGIN
+	SELECT AVG(salary) from Users;
+	
+END$$
+
+MariaDB [person]> call avgSalary();
++-------------+
+| AVG(salary) |
++-------------+
+|  81000.0000 |
++-------------+
+
+
+5. Create a procedure named minmax which displays the lowest and the highest salary of the users. Run the procedure to display the lowest and the highest salary.
+
+create PROCEDURE minmax ()
+BEGIN
+	SELECT MAX(salary) AS Highest_Salary, MIN(salary) AS Lowest_Salary from Users;
+	
+END$$
+
+MariaDB [person]> call minmax();
++----------------+---------------+
+| Highest_Salary | Lowest_Salary |
++----------------+---------------+
+|         100000 |         50000 |
++----------------+---------------+
+
+6. Create trigger(s) to update the records in the summary table. The summary table will contain only one record and will be updated each time a new entry is made to the users table, or a user is deleted from the users table. You need to create the following two triggers.
+
+I. Whenever a new entry is made to the user’s table then total_user attribute in the summary table must be incremented by 1.
+
+create 
+	TRIGGER users_after_insert AFTER INSERT
+	ON person.Users
+	FOR EACH ROW BEGIN
+	UPDATE Summary SET total_users=total_users + 1;
+END$$
+
+MariaDB [person]> call countUsers;
++----------------+
+| COUNT(user_id) |
++----------------+
+|              5 |
++----------------+
+
+MariaDB [person]> call insertInUsers('Zyan','1224','zyan@gmail.com',60000);
+Query OK, 2 rows affected (0.014 sec)
+
+MariaDB [person]> select* from Summary;
++-------------+
+| total_users |
++-------------+
+|           6 |
++-------------+
+
+II. Whenever a record is deleted from the user’s table then total_user attribute in the summary table must be decremented by 1.
+
+create 
+	TRIGGER users_after_delete AFTER DELETE
+	ON person.'Users'
+	FOR EACH ROW BEGIN
+	UPDATE Summary SET total_users=total_users - 1;
+END$$	
+
+
+MariaDB [person]> DELETE FROM Users WHERE user_id=5;
+Query OK, 1 row affected (0.011 sec)
+
+MariaDB [person]> select* from Summary;
++-------------+
+| total_users |
++-------------+
+|           5 |
++-------------+
+
+
+

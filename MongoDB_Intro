@@ -1,0 +1,159 @@
+Exercises
+
+1. Create a database named your rollno_section (i.e. P20_8784_4A).
+
+test> use P20_0567_5A
+switched to db P20_0567_5A
+P20_0567_5A> show dbs
+P20_0567_5A   72.00 KiB
+admin         40.00 KiB
+config       108.00 KiB
+local         40.00 KiB
+
+2. Create a collection named users.
+
+P20_0567_5A> db.createCollection("users")
+{ ok: 1 }
+P20_0567_5A> show collections
+users
+
+3. Insert the following record in the user’s collection.
+
+username password email DOB Address Contact
+Ali def321 ali123@yahoo.com 1996-03-04 Peshawar +923332233322
+Haroon fast123 haroon@gmail.com - Karachi -
+Zain Abc123 zain@gmail.com 1997-02-13 Islamabad -
+Atif Qwe123 atif@gmail.com - Islamabad +923139834276
+Noman def321 noman@gmail.com 1996-03-04 Peshawar +923349056432
+
+P20_0567_5A> db.users.insert({username:"Ali", password:"def321", email:"ali123@yahoo.com", DOB:"1996-03-04", Address:"Peshawar",  Contact:"+923332233322"})
+DeprecationWarning: Collection.insert() is deprecated. Use insertOne, insertMany, or bulkWrite.
+{
+  acknowledged: true,
+  insertedIds: { '0': ObjectId("63639e16558f20d210eb0d06") }
+}
+P20_0567_5A> db.users.insert({username:"Haroon", password:"fast123", email:"haroon@gmail.com", Address:"Karachi"})
+{
+  acknowledged: true,
+  insertedIds: { '0': ObjectId("63639e9e558f20d210eb0d07") }
+}
+P20_0567_5A> db.users.insert({username:"Zain", password:"Abc123", email:"zain@gmail.com", DOB:"1997-02-13", Address:"Islamabad"})
+{
+  acknowledged: true,
+  insertedIds: { '0': ObjectId("63639ee5558f20d210eb0d08") }
+}
+P20_0567_5A> db.users.insert({username:"Atif", password:"Qwe123", email:"atif@gmail.com", Address:"Islamabad",  Contact:"+923139834276"})
+{
+  acknowledged: true,
+  insertedIds: { '0': ObjectId("63639f43558f20d210eb0d09") }
+}
+P20_0567_5A> db.users.insert({username:"Noman", password:"def321", email:"noman@gmail.com", DOB:"1996-03-04", Address:"Peshawar",  Contact:"+923349056432"})
+{
+  acknowledged: true,
+  insertedIds: { '0': ObjectId("63639f95558f20d210eb0d0a") }
+}
+
+4. Show all users list using find command.
+
+P20_0567_5A> db.users.find()
+[
+  {
+    _id: ObjectId("63639e16558f20d210eb0d06"),
+    username: 'Ali',
+    password: 'def321',
+    email: 'ali123@yahoo.com',
+    DOB: '1996-03-04',
+    Address: 'Peshawar',
+    Contact: '+923332233322'
+  },
+  {
+    _id: ObjectId("63639e9e558f20d210eb0d07"),
+    username: 'Haroon',
+    password: 'fast123',
+    email: 'haroon@gmail.com',
+    Address: 'Karachi'
+  },
+  {
+    _id: ObjectId("63639ee5558f20d210eb0d08"),
+    username: 'Zain',
+    password: 'Abc123',
+    email: 'zain@gmail.com',
+    DOB: '1997-02-13',
+    Address: 'Islamabad'
+  },
+  {
+    _id: ObjectId("63639f43558f20d210eb0d09"),
+    username: 'Atif',
+    password: 'Qwe123',
+    email: 'atif@gmail.com',
+    Address: 'Islamabad',
+    Contact: '+923139834276'
+  },
+  {
+    _id: ObjectId("63639f95558f20d210eb0d0a"),
+    username: 'Noman',
+    password: 'def321',
+    email: 'noman@gmail.com',
+    DOB: '1996-03-04',
+    Address: 'Peshawar',
+    Contact: '+923349056432'
+  }
+]
+
+5. Show all users who lives in Islamabad.
+
+P20_0567_5A> db.users.find({Address:"Islamabad"})
+[
+  {
+    _id: ObjectId("63639ee5558f20d210eb0d08"),
+    username: 'Zain',
+    password: 'Abc123',
+    email: 'zain@gmail.com',
+    DOB: '1997-02-13',
+    Address: 'Islamabad'
+  },
+  {
+    _id: ObjectId("63639f43558f20d210eb0d09"),
+    username: 'Atif',
+    password: 'Qwe123',
+    email: 'atif@gmail.com',
+    Address: 'Islamabad',
+    Contact: '+923139834276'
+  }
+]
+
+6. Show all the users who lives in Peshawar or in Karachi.
+
+P20_0567_5A> db.users.find({Address:{$in:["Peshawar","Karachi"]}})
+[
+  {
+    _id: ObjectId("63639e16558f20d210eb0d06"),
+    username: 'Ali',
+    password: 'def321',
+    email: 'ali123@yahoo.com',
+    DOB: '1996-03-04',
+    Address: 'Peshawar',
+    Contact: '+923332233322'
+  },
+  {
+    _id: ObjectId("63639e9e558f20d210eb0d07"),
+    username: 'Haroon',
+    password: 'fast123',
+    email: 'haroon@gmail.com',
+    Address: 'Karachi'
+  },
+  {
+    _id: ObjectId("63639f95558f20d210eb0d0a"),
+    username: 'Noman',
+    password: 'def321',
+    email: 'noman@gmail.com',
+    DOB: '1996-03-04',
+    Address: 'Peshawar',
+    Contact: '+923349056432'
+  }
+]
+
+
+
+
+
